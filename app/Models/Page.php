@@ -29,4 +29,16 @@ class Page extends Model
         return $this->belongsTo(PageFollower::class);
     }
 
+    /**
+     *
+     * check page exists or not by page id
+     *
+     * @param $id
+     * @return mixed
+     */
+    public static function isPageExists($id)
+    {
+        return Page::where('id',$id)->exists();
+    }
+
 }

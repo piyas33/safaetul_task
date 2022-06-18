@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class PersonPost extends Model
 {
@@ -24,5 +25,47 @@ class PersonPost extends Model
         return $this->belongsTo(User::class);
     }
 
+    public static function getOwnPost($person_id)
+    {
+        $post = DB::table('person_posts')
+            ->where('person_id',$person_id)
+            ->get();
+
+        $all_post = [];
+        if (count($post)) {
+            foreach ($post as $data) {
+                $content = [];
+                $content['id'] = $data->id;
+                $content['post_content'] = $data->post_content;
+                $content['created_at'] = \Carbon\Carbon::parse($data->created_at)->diffForHumans();
+                $content['is_published'] = filter_var($data->is_published, FILTER_VALIDATE_BOOLEAN);
+                $all_post[] = $content;
+            }
+        }
+
+        return $all_post;
+    }
+
+    public static function getAllPersonPost($person_id)
+    {
+        $post = DB::table('person_posts')
+            ->join('person_followers', 'person_posts.person_id', '=', 'person_followers.follow_to')
+            ->where('person_followers.follow_from',$person_id)
+            ->get();
+
+        $all_post = [];
+        if (count($post)) {
+            foreach ($post as $data) {
+                $content = [];
+                $content['id'] = $data->id;
+                $content['post_content'] = $data->post_content;
+                $content['created_at'] = \Carbon\Carbon::parse($data->created_at)->diffForHumans();
+                $content['is_published'] = filter_var($data->is_published, FILTER_VALIDATE_BOOLEAN);
+                $all_post[] = $content;
+            }
+        }
+
+        return $all_post;
+    }
 
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class PageFollower extends Model
 {
@@ -24,4 +25,11 @@ class PageFollower extends Model
     {
         return $this->belongsTo(Page::class);
     }
+
+    public static function isAlreadyPageFollowed($follow_from_person,$follow_to_page) {
+        return PageFollower::where('follow_from_person',$follow_from_person)
+            ->where('follow_to_page',$follow_to_page)
+            ->exists();
+    }
+
 }

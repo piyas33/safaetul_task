@@ -84,4 +84,16 @@ class User extends Authenticatable
         return $this->hasMany(PageFollower::class);
     }
 
+    /**
+     *
+     * check person exists or not by person id
+     *
+     * @param $id
+     * @return mixed
+     */
+    public static function isPersonExists($id)
+    {
+        return User::where('id',$id)->exists();
+    }
+
 }

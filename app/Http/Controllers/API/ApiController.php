@@ -10,6 +10,7 @@ use App\Models\PersonFollower;
 use App\Models\PersonPost;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 
@@ -51,10 +52,24 @@ class ApiController extends BaseController
                 return $this->sendError('Validation Error.', $validator->errors());
             }
 
-            $pageResponse = PersonFollower::create([
+            if(!User::isPersonExists($request->follow_from) || !User::isPersonExists($personId)) {
+                return $this->sendError('Person Not Found', "",404);
+            }
+
+            $data = [
                 'follow_from' => $request->follow_from,
                 'follow_to' => $personId
-            ]);
+            ];
+
+            if($request->follow_from == $personId) {
+                return $this->sendResponse($data, 'You can not follow yourself!');
+            }
+
+            if(PersonFollower::isAlreadyFollow($request->follow_from,$personId)) {
+                return $this->sendResponse($data, 'You already follow.');
+            }
+
+            $pageResponse = PersonFollower::create($data);
 
             return $this->sendResponse($pageResponse, 'Congratulations!! Followed Successfully.');
         } catch (\Exception $e) {
@@ -75,10 +90,24 @@ class ApiController extends BaseController
                 return $this->sendError('Validation Error.', $validator->errors());
             }
 
-            $pageResponse = PageFollower::create([
+            if(!User::isPersonExists($request->follow_from_person)) {
+                return $this->sendError('Person Not Found', "",404);
+            }
+
+            if(!Page::isPageExists($pageId)) {
+                return $this->sendError('Page Not Found', "",404);
+            }
+
+            $data = [
                 'follow_from_person' => $request->follow_from_person,
                 'follow_to_page' => $pageId
-            ]);
+            ];
+
+            if(PageFollower::isAlreadyPageFollowed($request->follow_from_person,$pageId)) {
+                return $this->sendResponse($data, 'You already follow.');
+            }
+
+            $pageResponse = PageFollower::create($data);
 
             return $this->sendResponse($pageResponse, 'Congratulations!! Followed Successfully.');
         } catch (\Exception $e) {
@@ -99,6 +128,10 @@ class ApiController extends BaseController
 
             if ($validator->fails()) {
                 return $this->sendError('Validation Error.', $validator->errors());
+            }
+
+            if(!User::isPersonExists($request->person_id)) {
+                return $this->sendError('Person Not Found', "",404);
             }
 
             $pageResponse = PersonPost::create([
@@ -128,6 +161,10 @@ class ApiController extends BaseController
                 return $this->sendError('Validation Error.', $validator->errors());
             }
 
+            if(!User::isPersonExists($request->person_id)) {
+                return $this->sendError('Person Not Found', "",404);
+            }
+
             $pageResponse = PagePost::create([
                 'person_id' => $request->person_id,
                 'page_id' => $pageId,
@@ -154,12 +191,19 @@ class ApiController extends BaseController
                 return $this->sendError('Validation Error.', $validator->errors());
             }
 
-            $personPost = PersonPost::get();
-            $pagePost = PagePost::get();
+            if(!User::isPersonExists($request->person_id)) {
+                return $this->sendError('Person Not Found', "",404);
+            }
 
-            //$personFeedRes = array_merge($personPost,$pagePost);
+            $pagePost = PagePost::getAllPagePost($request->person_id);
+            $personPost = PersonPost::getAllPersonPost($request->person_id);
+            $ownPost = PersonPost::getOwnPost($request->person_id);
+            $ownPagePost = PagePost::getOwnPagePost($request->person_id);
 
-            return $this->sendResponse($pagePost, 'Person Feed');
+
+            $personFeedRes = array_merge($personPost, $pagePost, $ownPost, $ownPagePost);
+
+            return $this->sendResponse($personFeedRes, 'Person Feed');
         } catch (\Exception $e) {
 
             return $this->sendError('Something Wrong!.', $e);
