@@ -16,16 +16,28 @@ class PageFollower extends Model
         'follow_to_page'
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function users()
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function pages()
     {
         return $this->belongsTo(Page::class);
     }
 
+    /**
+     * check already follow page or not
+     * @param $follow_from_person
+     * @param $follow_to_page
+     * @return mixed
+     */
     public static function isAlreadyPageFollowed($follow_from_person,$follow_to_page) {
         return PageFollower::where('follow_from_person',$follow_from_person)
             ->where('follow_to_page',$follow_to_page)

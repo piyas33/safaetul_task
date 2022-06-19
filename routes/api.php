@@ -16,9 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//API route for register new user person
+//API route for register new person
 Route::post('/auth/register', [AuthController::class, 'register']);
-//API route for login user person
+//API route for login person
 Route::post('/auth/login', [AuthController::class, 'login']);
 
 //Protecting Routes

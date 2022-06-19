@@ -24,6 +24,13 @@ class PersonFollower extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * check already follow or not
+     *
+     * @param $follow_from
+     * @param $follow_to
+     * @return mixed
+     */
     public static function isAlreadyFollow($follow_from,$follow_to) {
         return PersonFollower::where('follow_from',$follow_from)
             ->where('follow_to',$follow_to)

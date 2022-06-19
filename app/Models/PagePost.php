@@ -26,11 +26,21 @@ class PagePost extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function pages()
     {
         return $this->belongsTo(Page::class);
     }
 
+    /**
+     *
+     * get own page post
+     *
+     * @param $person_id
+     * @return array
+     */
     public static function getOwnPagePost($person_id)
     {
         $post = DB::table('page_posts')
@@ -52,6 +62,13 @@ class PagePost extends Model
         return $all_post;
     }
 
+    /**
+     *
+     * get all following page post
+     *
+     * @param $person_id
+     * @return array
+     */
     public static function getAllPagePost($person_id)
     {
         $post = DB::table('page_posts')

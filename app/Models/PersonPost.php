@@ -25,6 +25,11 @@ class PersonPost extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * get person own post
+     * @param $person_id
+     * @return array
+     */
     public static function getOwnPost($person_id)
     {
         $post = DB::table('person_posts')
@@ -46,6 +51,11 @@ class PersonPost extends Model
         return $all_post;
     }
 
+    /**
+     * get all following person post
+     * @param $person_id
+     * @return array
+     */
     public static function getAllPersonPost($person_id)
     {
         $post = DB::table('person_posts')
