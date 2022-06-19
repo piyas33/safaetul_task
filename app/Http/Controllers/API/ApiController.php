@@ -16,6 +16,12 @@ use Validator;
 
 class ApiController extends BaseController
 {
+
+    /**
+     * create a page
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function pageCreate(Request $request) {
         try {
 
@@ -33,7 +39,7 @@ class ApiController extends BaseController
                 'page_name' => $request->page_name
             ]);
 
-            return $this->sendResponse($pageResponse, 'Page Created Successfully.');
+            return $this->sendResponse($pageResponse, 'You have Successfully Created a Page.');
         } catch (\Exception $e) {
 
             return $this->sendError('Something Wrong!.', []);
@@ -41,6 +47,12 @@ class ApiController extends BaseController
         }
     }
 
+    /**
+     * follow person
+     * @param Request $request
+     * @param $personId
+     * @return \Illuminate\Http\Response
+     */
     public function followPerson(Request $request,$personId) {
         try {
 
@@ -79,6 +91,12 @@ class ApiController extends BaseController
         }
     }
 
+    /**
+     * follow page
+     * @param Request $request
+     * @param $pageId
+     * @return \Illuminate\Http\Response
+     */
     public function followPage(Request $request,$pageId) {
         try {
 
@@ -117,6 +135,12 @@ class ApiController extends BaseController
         }
     }
 
+    /**
+     * Logged in person publishes a post.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function personAttachPost(Request $request) {
         try {
 
@@ -148,6 +172,13 @@ class ApiController extends BaseController
         }
     }
 
+    /**
+     * Logged in person publishes a post to a page owned by him/her
+     *
+     * @param Request $request
+     * @param $pageId
+     * @return \Illuminate\Http\Response
+     */
     public function pageAttachPost(Request $request,$pageId) {
         try {
 
@@ -180,6 +211,11 @@ class ApiController extends BaseController
         }
     }
 
+    /**
+     * Get the feed for the currently logged in person
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function personFeed(Request $request) {
         try {
 

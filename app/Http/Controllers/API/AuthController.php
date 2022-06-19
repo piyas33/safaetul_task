@@ -12,6 +12,11 @@ use App\Models\User;
 class AuthController extends BaseController
 {
 
+    /**
+     * method for register a new person
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function register(Request $request)
     {
         try {
@@ -42,7 +47,7 @@ class AuthController extends BaseController
                 'user_details' => $user
             ];
 
-            return $this->sendResponse($response, 'Registration Successfuly.');
+            return $this->sendResponse($response, 'You have Successfully Registration');
         } catch (\Exception $e) {
 
             return $this->sendError('Something Want Wrong!.', []);
@@ -52,6 +57,11 @@ class AuthController extends BaseController
 
     }
 
+    /**
+     * method for Person Login
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     */
     public function login(Request $request)
     {
         try {
@@ -71,7 +81,7 @@ class AuthController extends BaseController
                 'token_type' => 'Bearer',
                 'user_details' => $user
             ];
-            return $this->sendResponse($response, 'Successful Login.');
+            return $this->sendResponse($response, 'You have Successfully Login.');
 
         } catch (\Exception $e) {
 
@@ -81,7 +91,10 @@ class AuthController extends BaseController
 
     }
 
-    // method for user logout and delete token
+    /**
+     * method for person logout and delete token
+     * @return string[]
+     */
     public function logout()
     {
         auth()->user()->tokens()->delete();
