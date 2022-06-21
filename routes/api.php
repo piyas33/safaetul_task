@@ -23,11 +23,22 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 
 //Protecting Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    // API route for Create a Page
     Route::post('/page/create', [ApiController::class, 'pageCreate']);
+
+    // API route for follow the another person by given id
     Route::post('/follow/person/{personId}', [ApiController::class, 'followPerson']);
+
+    // API route for Follow the page
     Route::post('/follow/page/{pageId}', [ApiController::class, 'followPage']);
+
+    // API route for published a post
     Route::post('/person/attach-post', [ApiController::class, 'personAttachPost']);
+
+    // API route for published a post in a page.
     Route::post('/page/{pageId}/attach-post', [ApiController::class, 'pageAttachPost']);
+
+    // API route for person feed
     Route::post('/person/feed', [ApiController::class, 'personFeed']);
 
     // API route for logout user

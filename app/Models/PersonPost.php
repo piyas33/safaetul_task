@@ -40,7 +40,6 @@ class PersonPost extends Model
         if (count($post)) {
             foreach ($post as $data) {
                 $content = [];
-                $content['id'] = $data->id;
                 $content['post_content'] = $data->post_content;
                 $content['created_at'] = \Carbon\Carbon::parse($data->created_at)->diffForHumans();
                 $content['is_published'] = filter_var($data->is_published, FILTER_VALIDATE_BOOLEAN);
@@ -67,7 +66,6 @@ class PersonPost extends Model
         if (count($post)) {
             foreach ($post as $data) {
                 $content = [];
-                $content['id'] = $data->id;
                 $content['post_content'] = $data->post_content;
                 $content['created_at'] = \Carbon\Carbon::parse($data->created_at)->diffForHumans();
                 $content['is_published'] = filter_var($data->is_published, FILTER_VALIDATE_BOOLEAN);
